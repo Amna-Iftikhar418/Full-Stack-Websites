@@ -1,0 +1,77 @@
+.faq-box{
+   padding-left: 130px;
+   padding-right: 150px;
+
+ margin-bottom: 150px;
+
+   
+}
+.faq-box h2{
+    padding-bottom: 20px;
+}
+
+.faq-content h4{
+     background-color: rgb(53, 53, 53);
+   padding: 25px;
+   position: relative;
+   margin-bottom: 5px;
+   cursor: pointer;
+}
+.faq-content span{
+  position:absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+.faq-content span i{
+    font-size: 40px;
+}
+
+ .hide {
+  text-align: start;
+  margin: 0;
+  background-color: rgb(53, 53, 53);
+  max-height: 0;               
+  overflow: hidden;            
+  padding: 0 20px;           
+  transform: scaleY(1);        
+  transition: max-height 0.05s ease-out, padding 0.5s ease;
+}
+
+.show {
+   font-size: 20px;
+    max-height: 700px;   
+    margin-bottom: 10px;       
+    padding: 20px;               
+}
+.last-input-button{
+    display: flex;
+ position: absolute;
+ left: 50%;
+  transform: translate(-50%);
+  gap: 3px;
+}
+.last-input-button input{
+     width: 600px !important;
+    background: transparent;
+    color: white !important;
+}
+.last-input-button label{ 
+    color: rgb(205, 202, 202);
+
+}
+.last-input-button input:focus{
+      background: transparent;
+    border: 2px solid white;
+    box-shadow: 0px 0px 4px white;
+}
+.last-input-button button{
+     font-size: 20px;
+    width: 250px;
+    color: white;
+      background: rgb(224, 2, 2);
+}
+.faq-para{
+    margin-top: 50px;
+}

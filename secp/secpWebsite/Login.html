@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to right, rgb(73, 139, 73), rgb(72, 72, 198));
+      background-repeat: no-repeat;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .login-page {
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 15px;
+      padding: 40px 50px;
+      width: 320px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      color: #fff;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      background: #fff;
+      box-shadow: 0 0 6px rgba(72, 72, 198, 0.7);
+    }
+
+    button {
+      background: rgb(72, 72, 198);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: rgb(63, 120, 63);
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 500px) {
+      .login-page {
+        width: 80%;
+        padding: 30px;
+      }
+    }
+
+    .flash-message {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="flashMessage" class="flash-message"></div>
+
+  <form id="loginForm" class="login-page">
+    <h2 style="color:white; text-align:center; margin-top:0;">Login</h2>
+
+    <label for="username">Username</label>
+    <input type="text" name="username" placeholder="Enter username" required>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" placeholder="Enter password" required>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <script>
+    function showFlashMessage(message, type) {
+      const flashMessage = document.getElementById("flashMessage");
+      flashMessage.textContent = message;
+      flashMessage.style.display = "block";
+      flashMessage.style.position = "fixed";
+      flashMessage.style.top = "20px";
+      flashMessage.style.left = "50%";
+      flashMessage.style.transform = "translateX(-50%)";
+      flashMessage.style.padding = "12px 25px";
+      flashMessage.style.borderRadius = "8px";
+      flashMessage.style.color = "#fff";
+      flashMessage.style.fontWeight = "500";
+      flashMessage.style.fontSize = "15px";
+      flashMessage.style.zIndex = "999";
+
+      if (type === "success") {
+        flashMessage.style.backgroundColor = "rgba(46, 204, 113, 0.9)";
+      } else {
+        flashMessage.style.backgroundColor = "rgba(231, 76, 60, 0.9)";
+      }
+
+      setTimeout(() => {
+        flashMessage.style.display = "none";
+      }, 2000);
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      try {
+        const formData = {
+          username: e.target.username.value,
+          password: e.target.password.value
+        };
+
+        const response = await fetch("http://127.0.0.1:3000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showFlashMessage(result.message, "success");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        } else {
+          showFlashMessage(result.message || "Error logging in", "error");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        showFlashMessage("Network error. Please try again.", "error");
+      }
+    });
+  </script>
+</body>
+
+</html>

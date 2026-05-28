@@ -1,0 +1,269 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark sticky-top pad">
+  <div class="container-fluid navbar-container-fluid">
+    <a class="navbar-brand " href="/listings"><i class="fa-regular fa-compass navbar-logo"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="/listings"><b>HOME</b></a>
+        <a class="nav-link" href="/listings"><b>Explore</b></a>
+        <a class="nav-link" href="/listings/map"><b>Map</b></a>
+        <a id="addListingLink" class="nav-link" href="/listings/new"><b>Become a HomeHive host</b></a>
+      </div>
+
+      <div class="d-flex gap-2  navbar-images  ">
+        <div><img class="animated-images" width="50" src="/images/home.png" alt=""> Homes</div>
+        <div><img class="animated-images" width="50" src="/images/baloon.avif" alt=""> Experiences</div>
+        <div><img class="animated-images" width="50" src="/images/bell.avif" alt=""> Services</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <% if (curruser) { %>
+          <a href="/profile" class="btn btn-outline-primary position-relative me-1" title="My Profile">
+            <i class="fa-solid fa-user"></i>
+          </a>
+          <a href="/inbox" class="btn btn-outline-info position-relative me-1" title="Messages">
+            <i class="fa-solid fa-envelope"></i>
+            <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                <%= unreadCount %>
+              </span>
+            <% } %>
+          </a>
+          <a href="/listings/liked" class="btn btn-outline-danger position-relative me-1">
+            <i class="fa-solid fa-heart"></i>
+            <% if (curruser.likes && curruser.likes.length > 0) { %>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <%= curruser.likes.length %>
+              </span>
+            <% } %>
+          </a>
+          <% if (curruser.isAdmin) { %>
+            <a href="/admin" class="btn btn-outline-warning me-1" title="Admin">
+              <i class="fa-solid fa-shield"></i>
+            </a>
+          <% } %>
+          <a href="/logout"><button class="btn btn-danger">Log out</button></a>
+        <% } else { %>
+          <a href="/signup"><button class="btn btn-danger"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign Up</button></a>
+          <a href="/login"><button class="btn btn-danger"><i class="fa-solid fa-user-plus"></i> Login</button></a>
+        <% } %>
+      </div>
+    </div>
+
+    <form class="d-flex align-items-center search-form" action="/listings/search" method="GET">
+      <select name="country" id="country-select" class="form-select me-2 select-country" required>
+        <option value="">Select country</option>
+        <% if (typeof countries !== 'undefined' && countries && countries.length > 0) { %>
+          <% countries.forEach(function(c) { %>
+            <option value="<%= c %>"><%= c %></option>
+          <% }); %>
+        <% } %>
+      </select>
+      <button class="btn search-btn btn-outline-success" type="submit">
+        <i class="fa-brands fa-searchengin"></i>
+      </button>
+    </form>
+    <script>
+      (function() {
+        var sel = document.getElementById('country-select');
+        if (sel && sel.options.length <= 1) {
+          var countries = <%- JSON.stringify(locals.countries || []) %>;
+          countries.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            sel.appendChild(opt);
+          });
+        }
+      })();
+    </script>
+  </div>
+
+  <!--  hideable navbar -->
+  <div class="navdiv mt-5 d-flex justify-content-center hideable-navbar-tabs" id="hideable-navbar-container">
+    <ul class="nav nav-pills mb-3 maintab hideable-navbar-unorderd-list" id="pills-tab" role="tablist">
+
+      <li class="nav-item" role="presentation">
+        <button class="nav-link tabs tab1 hideable-navbar-buttons" id="pills-home-tab"
+          data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+          aria-selected="false">
+          <div class="tab-btn-inner">
+            <span>Where</span>
+            <small id="nav-where-label" class="tab-sub-label"></small>
+          </div>
+        </button>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <button class="nav-link tabs tab2 hideable-navbar-buttons" id="pills-profile-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+          <div class="tab-btn-inner">
+            <span>Date</span>
+            <small id="nav-date-label" class="tab-sub-label"></small>
+          </div>
+        </button>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <button class="nav-link tabs tab3 hideable-navbar-buttons" id="pills-contact-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">
+          <div class="tab-btn-inner">
+            <span>Who</span>
+            <small id="nav-who-label" class="tab-sub-label"></small>
+          </div>
+        </button>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <button class="nav-link tabs tab4 hideable-navbar-buttons" id="pills-search-tab" type="button"
+          aria-label="Search" title="Search listings">
+          <span><i class="fa-solid fa-magnifying-glass"></i></span>
+        </button>
+      </li>
+
+    </ul>
+
+    <!-- hideable navbar content container (moved inside the navbar container) -->
+    <div class="tab-content hideable-navbar-tabs-content" id="pills-tabContent">
+
+
+    <!-- first option where -->
+    <div class="tab-pane fade  hideable-navbar-tabs-content-pane1  hideable-navbar-tabs-content-animation"
+      id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+
+      <p style="margin-left: 0; margin-bottom: 15px;"><b>SUGGESTION DESCRIPTION</b></p>
+      <input type="text" id="nav-where-input" class="form-control mb-3" placeholder="Type a country or city"
+        autocomplete="off">
+      <div class="unorder">
+        <ul id="nav-where-suggestions">
+          <li data-location=""><img src="/images/tab1.png" alt="img"> Nearby</li>
+          <li data-location="Pakistan"><img src="/images/tab2.png" alt="img"> Islamabad,Pakistan</li>
+          <li data-location="Pakistan"><img src="/images/tab3.webp" alt="img"> Karachi,Pakistan</li>
+          <li data-location="Turkiye"><img src="/images/tab4.png" alt="img"> Istanbul,Turkiye</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- second option date -->
+    <div class="tab-pane fade hideable-navbar-tabs-content-pane2 hideable-navbar-tabs-content-animation"
+      id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button id="prev"><i class="fa-solid fa-arrow-left"></i></button>
+          <div id="month-year"></div>
+          <p id="selected-date" class="selected-date">No date selected</p>
+          <button id="next"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="calendar-weekdays">
+          <div>Sun</div>
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+          <div>Sat</div>
+        </div>
+        <div class="calendar-days" id="days"></div>
+      </div>
+    </div>
+
+    <!-- third option who -->
+    <div class="tab-pane fade  p-4  hideable-navbar-tabs-content-pane3 hideable-navbar-tabs-content-animation"
+      id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+
+
+      <div class=" hideable-navbar-tabs-content-pane3-main-div">
+        <!-- inner -->
+        <div class=" hideable-navbar-tabs-content-pane3-main-div-content">
+          <h3>ADULTS</h3>
+          <!--  -->
+
+          <div class="hideable-navbar-tabs-content-pane3-main-div-counter">
+
+            <button id="negbtn" class="decrement">-</button>
+
+            <p id="demo1">0</p>
+
+            <button id="counterbtn" class="increment">+</button>
+
+          </div>
+          <!--  -->
+        </div>
+        <!-- inner -->
+
+
+        <div class="hideable-navbar-tabs-content-pane3-main-div-content">
+          <h3>CHILDREN</h3>
+
+          <div class="hideable-navbar-tabs-content-pane3-main-div-counter">
+            <button id="negbtn" class="decrement">-</button>
+            <p id="demo2">0</p>
+            <button id="counterbtn" class="increment">+</button>
+          </div>
+        </div>
+
+
+
+        <div class="hideable-navbar-tabs-content-pane3-main-div-content">
+          <h3>INFANTS</h3>
+
+          <div class="hideable-navbar-tabs-content-pane3-main-div-counter">
+            <button id="negbtn" class="decrement">-</button>
+            <p id="demo3">0</p>
+            <button id="counterbtn" class="increment">+</button>
+          </div>
+        </div>
+
+
+        <div class="hideable-navbar-tabs-content-pane3-main-div-content">
+          <h3>PETS</h3>
+
+          <div class="hideable-navbar-tabs-content-pane3-main-div-counter">
+            <button id="negbtn" class="decrement">-</button>
+            <p id="demo4">0</p>
+            <button id="counterbtn" class="increment">+</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarContainer = document.getElementById('hideable-navbar-container');
+      const tabButtons = document.querySelectorAll('.hideable-navbar-buttons');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      const tabContent = document.querySelector('.hideable-navbar-tabs-content');
+
+      // Close tabs when clicking outside
+      document.addEventListener('click', function(e) {
+        // Check if click is outside navbar container and not inside tab content
+        if (!navbarContainer.contains(e.target) && !tabContent.contains(e.target)) {
+          // Remove active class from all buttons
+          tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+          });
+          // Remove active and show classes from all panes
+          tabPanes.forEach(pane => {
+            pane.classList.remove('active', 'show');
+          });
+        }
+      });
+
+      // Prevent closing when clicking inside tab content
+      tabContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+  </script>
+
+</nav>

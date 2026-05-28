@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .flash-message {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <div id="flash-message" class="flash-message"></div>
+    <div class="header">
+
+      <div class="head-bg1"></div>
+
+      <div class="head-bg2"></div>
+      <div class="head-bg3"></div>
+      <div class="head-bg4">Securities and Exchange Commission of Pakistan</div>
+      <div class="head-bg5">
+        <a href="index.html">
+          <p>HOME</p>
+        </a>
+
+      </div>
+
+      <div class="head-bg6">
+        <button id="logoutBtn">LOG OUT</button>
+      </div>
+      <div class="head-bg6">
+        <a href="Login.html"> <button>LOGIN</button></a>
+      </div>
+      <div class="head-bg7"> <a href="SignUp.html"> <button>SIGN UP</button></a></div>
+
+
+    </div>
+    <div class="leap-section1">
+      <h1>Register your Company / Limited Liability Partnership</h1>
+    </div>
+    <div class="leap-section2">
+
+
+      </p>
+    </div>
+    <div>
+      <div class="leap-section3">
+        <div class="leap-section3-subparts">
+          <p>Enter a company name/LLP</p>
+          <button> <i class="fa-brands fa-searchengin"></i> search</button>
+        </div>
+      </div>
+    </div>
+    <!-- section4 -->
+    <div class="leap-section4">
+
+      <div class="leap-section4-subparts subpart1">
+        <div class="leap-image">
+
+        </div>
+        <h1>Help me decide</h1>
+        <ol class="leap-list">
+          <li>Simple and easy tool</li>
+          <li>Get to know your legal entity with few clicks</li>
+          <li>Business structure that suit your needs</li>
+        </ol>
+      </div>
+
+      <div class="leap-section4-subparts subpart2">
+        <div class="leap-image2">
+
+        </div>
+        <h1>Company/LLP</h1>
+        <ol class="leap-list">
+          <li>Simple and easy tool</li>
+          <li>Get to know your legal entity with few clicks</li>
+          <li>Business structure that suit your needs</li>
+        </ol>
+      </div>
+
+    </div>
+    </div>
+    <!-- section5 -->
+    <div class="leap-section5">
+      <div class="leap-section4-subparts subpart3">
+        <div class="leap-image3">
+
+        </div>
+        <h1>Manual challan generator</h1>
+        <ol class="leap-list">
+          <li>Simple and easy tool</li>
+          <li>Get to know your legal entity with few clicks</li>
+          <li>Business structure that suit your needs</li>
+        </ol>
+      </div>
+    </div>
+    <!-- section6 -->
+    <div class="leap-section6">
+      <div class="leap-section6-img"></div>
+      <h2>Company Name Search</h2>
+      <i class="fa-solid fa-greater-than"></i>
+    </div>
+    <div class="section6-end"></div>
+    <!-- footer -->
+    <div class="footer">
+      <div class="footer-f1">
+        <h2>SECP HEAD OFFICE,NIC BUILDING 6<sub>3</sub> JINNAH AVENUE BLUE AREA,ISLAMABAD.</h2>
+      </div>
+      <div class="footer-f2"></div>
+    </div>
+    <div class="footer2">
+      <div>
+        <i class="fa-solid fa-copyright"></i> SECP 2016, Securities & Exchange Commission of Pakistan.
+      </div>
+      <div class="footer2-list">
+
+        <p>Privacy policy</p>
+        <p>Terms of use</p>
+        <p>Contact us </p>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function showFlashMessage(message, type) {
+      const flashMessage = document.getElementById("flash-message")
+      flashMessage.textContent = message;
+      flashMessage.style.display = "block";
+      flashMessage.style.position = "fixed";
+      flashMessage.style.top = "20px";
+      flashMessage.style.left = "50%";
+      flashMessage.style.transform = "translateX(-50%)";
+      flashMessage.style.padding = "12px 25px";
+      flashMessage.style.borderRadius = "8px";
+      flashMessage.style.color = "#fff";
+      flashMessage.style.fontWeight = "500";
+      flashMessage.style.fontSize = "20px";
+      flashMessage.style.zIndex = "999";
+      if (type === "success") {
+        flashMessage.style.backgroundColor = "rgba(46, 204, 113, 0.9)";
+      } else {
+        flashMessage.style.backgroundColor = "rgba(231, 76, 60, 0.9)";
+      }
+      setTimeout(() => {
+        flashMessage.style.display = "none";
+      }, 2000);
+    }
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:3000/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          showFlashMessage(result.message || "Something went wrong!", "error");
+          return;
+        }
+
+
+        showFlashMessage(result.message, "success");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+      } catch (error) {
+        showFlashMessage("Server error or backend not running", "error");
+        console.error(error);
+      }
+    });
+
+
+  </script>
+</body>
+
+</html>

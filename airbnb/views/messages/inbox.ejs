@@ -1,0 +1,54 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .inbox-wrap { max-width: 900px; margin: 0 auto; }
+  .conv-item { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; margin-bottom: 10px; text-decoration: none; color: inherit; display: flex; gap: 14px; align-items: center; transition: all .15s; }
+  .conv-item:hover { border-color: #c14a2b; box-shadow: 0 4px 14px rgba(0,0,0,.06); color: inherit; }
+  .conv-item.unread { border-left: 4px solid #c14a2b; }
+  .conv-avatar { width: 52px; height: 52px; border-radius: 50%; background: #c14a2b; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+  .conv-body { flex: 1; min-width: 0; }
+  .conv-title { font-weight: 600; display: flex; justify-content: space-between; gap: 10px; }
+  .conv-preview { color: #666; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conv-time { font-size: 12px; color: #999; white-space: nowrap; }
+  .unread-badge { background: #c14a2b; color: #fff; border-radius: 999px; padding: 2px 8px; font-size: 11px; }
+</style>
+
+<div class="inbox-wrap">
+  <h2 class="mb-4"><i class="fa-solid fa-inbox"></i> Inbox</h2>
+
+  <% if (conversations.length === 0) { %>
+    <div class="card p-5 text-center" style="border-radius: 14px;">
+      <div style="font-size: 48px; color: #ccc;"><i class="fa-regular fa-envelope-open"></i></div>
+      <h5 class="mt-3">No conversations yet</h5>
+      <p class="text-muted">Start by messaging a host from a listing page.</p>
+      <a href="/listings" class="btn btn-danger align-self-center">Browse listings</a>
+    </div>
+  <% } else { %>
+    <% conversations.forEach(function(c) { %>
+      <% const other = c.participants.find(p => String(p._id) !== currentUserId) || c.participants[0]; %>
+      <% const isUnread = (c.unreadBy || []).some(uid => String(uid) === currentUserId); %>
+      <a href="/inbox/<%= c._id %>" class="conv-item <%= isUnread ? 'unread' : '' %>">
+        <% if (other.profileImage && other.profileImage.url) { %>
+          <img src="<%= other.profileImage.url %>" class="conv-avatar" alt="" style="object-fit: cover;">
+        <% } else { %>
+          <div class="conv-avatar"><%= (other.username || '?').charAt(0).toUpperCase() %></div>
+        <% } %>
+        <div class="conv-body">
+          <div class="conv-title">
+            <span>
+              <%= other.username %>
+              <% if (c.listing) { %>
+                <small class="text-muted"> · <%= c.listing.title %></small>
+              <% } %>
+            </span>
+            <span class="conv-time">
+              <% if (isUnread) { %><span class="unread-badge">new</span><% } %>
+              <%= c.lastMessageAt ? new Date(c.lastMessageAt).toLocaleDateString() : '' %>
+            </span>
+          </div>
+          <div class="conv-preview"><%= c.lastMessage || 'Start the conversation...' %></div>
+        </div>
+      </a>
+    <% }); %>
+  <% } %>
+</div>

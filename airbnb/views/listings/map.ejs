@@ -1,0 +1,54 @@
+<% layout("layouts/boilerplate") -%>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+
+<div class="container" style="padding-top: 8px;">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h3 class="mb-0"><i class="fa-solid fa-map-location-dot me-2"></i>Explore listings on the map</h3>
+    <span class="text-muted"><%= points.length %> listings</span>
+  </div>
+  <div id="mapAll" style="height: calc(100vh - 320px); min-height: 500px; border-radius: 12px; overflow: hidden;"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+(function() {
+  const points = <%- JSON.stringify(points) %>;
+  const map = L.map('mapAll', { worldCopyJump: true }).setView([20, 0], 2);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 20,
+    attribution: '&copy; OpenStreetMap, &copy; CARTO'
+  }).addTo(map);
+
+  const cluster = L.markerClusterGroup();
+  const escapeHtml = (s) => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+
+  points.forEach(p => {
+    if (typeof p.lat !== 'number' || typeof p.lng !== 'number') return;
+    const m = L.marker([p.lat, p.lng]);
+    const imgTag = p.img ? '<img src="' + escapeHtml(p.img) + '" style="width:100%;height:100px;object-fit:cover;border-radius:6px;margin-bottom:6px;">' : '';
+    const html =
+      '<div style="max-width:220px;">' +
+      imgTag +
+      '<strong>' + escapeHtml(p.title) + '</strong><br>' +
+      '<small class="text-muted"><i class="fa-solid fa-location-dot"></i> ' + escapeHtml(p.location) + ', ' + escapeHtml(p.country) + '</small><br>' +
+      '<div style="margin-top:4px;"><strong>₹' + Number(p.price || 0).toLocaleString('en-IN') + '</strong>/night</div>' +
+      '<a href="/listings/' + encodeURIComponent(p.id) + '" class="btn btn-sm btn-danger mt-2">View</a>' +
+      '</div>';
+    m.bindPopup(html);
+    cluster.addLayer(m);
+  });
+
+  map.addLayer(cluster);
+
+  if (points.length) {
+    try {
+      const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
+      map.fitBounds(bounds.pad(0.2));
+    } catch (e) {}
+  }
+})();
+</script>

@@ -1,0 +1,32 @@
+<% layout("layouts/boilerplate") %>
+<% const active = 'bookings'; %>
+
+<div class="admin-shell">
+  <%- include("layout-nav", { active }) %>
+
+  <div class="admin-main">
+    <h2 class="mb-3">Bookings</h2>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Listing</th><th>Guest</th><th>Check-in</th><th>Check-out</th><th>Total</th><th>Status</th><th>Payment</th></tr>
+        </thead>
+        <tbody>
+          <% bookings.forEach(function(b) { %>
+            <tr>
+              <td><%= b.listing ? b.listing.title : '(deleted)' %></td>
+              <td><%= b.guest ? b.guest.username : '—' %><br><small class="text-muted"><%= b.guest ? b.guest.email : '' %></small></td>
+              <td><%= new Date(b.checkIn).toLocaleDateString() %></td>
+              <td><%= new Date(b.checkOut).toLocaleDateString() %></td>
+              <td>$<%= b.totalPrice %></td>
+              <td><span class="pill pill-<%= b.status === 'confirmed' ? 'ok' : (b.status === 'cancelled' ? 'bad' : 'warn') %>"><%= b.status %></span></td>
+              <td><span class="pill pill-<%= b.paymentStatus === 'paid' ? 'ok' : 'warn' %>"><%= b.paymentStatus %></span></td>
+            </tr>
+          <% }); %>
+          <% if (bookings.length === 0) { %><tr><td colspan="7" class="text-center text-muted">No bookings yet</td></tr><% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

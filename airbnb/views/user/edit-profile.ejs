@@ -1,0 +1,121 @@
+<% layout("layouts/boilerplate") -%>
+
+<div class="container my-5" style="padding-top: 20px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card profile-edit-card">
+                <div class="card-header">
+                    <h4><i class="fas fa-edit me-2"></i> Edit Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/profile/edit" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <!-- Profile Image Upload -->
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <% if (user.profileImage && user.profileImage.url) { %>
+                                    <img src="<%= user.profileImage.url %>" 
+                                         alt="Profile" 
+                                         id="previewImage"
+                                         class="rounded-circle profile-avatar">
+                                <% } else { %>
+                                    <div class="rounded-circle profile-avatar-placeholder d-inline-flex align-items-center justify-content-center" 
+                                         id="previewImage">
+                                        <span style="font-size: 60px; color: white;"><%= user.username.charAt(0).toUpperCase() %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <label for="profileImage" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-camera me-1"></i> Change Profile Photo
+                            </label>
+                            <input type="file" 
+                                   id="profileImage" 
+                                   name="profileImage" 
+                                   class="d-none" 
+                                   accept="image/*"
+                                   onchange="previewFile()">
+                            <p class="text-muted small mt-2">JPG, PNG or GIF. Max size 5MB.</p>
+                        </div>
+
+                        <!-- Name Fields -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="firstName" 
+                                       name="firstName" 
+                                       value="<%= user.firstName %>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="lastName" 
+                                       name="lastName" 
+                                       value="<%= user.lastName %>">
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   id="phone" 
+                                   name="phone" 
+                                   value="<%= user.phone %>"
+                                   placeholder="+1 (555) 123-4567">
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" 
+                                      id="bio" 
+                                      name="bio" 
+                                      rows="4"
+                                      maxlength="500"
+                                      placeholder="Tell us about yourself..."><%= user.bio %></textarea>
+                            <small class="text-muted">Max 500 characters</small>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="/profile" class="btn btn-profile-cancel">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-profile">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewFile() {
+        const file = document.getElementById('profileImage').files[0];
+        const preview = document.getElementById('previewImage');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    // Replace the div with an img tag
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'rounded-circle profile-avatar';
+                    img.id = 'previewImage';
+                    preview.parentNode.replaceChild(img, preview);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

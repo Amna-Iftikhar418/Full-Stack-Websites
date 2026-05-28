@@ -1,0 +1,63 @@
+<%- layout("layouts/boilerplate") %>
+    <div class="row mt-4">
+
+        <div class="d-flex gap-2 ">
+            <div class="d-flex justify-content-center align-items-center gap-3 ">
+                <img style="margin-left: 160px;" class="home animated-images" width="70px" src="/images/signup.png"
+                    alt="gif">
+
+                <div>
+                    <h1>SingnUp</h1>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-6 offset-3 mt-5">
+
+        <form action="/signup" method="post" class="needs-validation" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <label for="username" class="form-label">Username:</label>
+            <input name="username" type="text" id="username" class="form-control mb-3" required>
+            <div class="valid-feedback">Looks good!</div>
+
+            <label for="email" class="form-label">Email:</label>
+            <input name="email" type="email" id="email" class="form-control mb-3" required>
+
+            <label for="password" class="form-label">Password:</label>
+            <input name="password" type="password" id="password" class="form-control mb-1" required minlength="8">
+            <div class="invalid-feedback mb-2">Password must be at least 8 characters</div>
+
+            <label for="confirmPassword" class="form-label">Confirm Password:</label>
+            <input type="password" id="confirmPassword" class="form-control mb-3" required>
+            <div class="invalid-feedback">Passwords do not match</div>
+
+            <button class="btn btn-success mb-5">Submit</button>
+
+        </form>
+        <script>
+          document.querySelector('form').addEventListener('submit', function(e) {
+            const pw = document.getElementById('password');
+            const cpw = document.getElementById('confirmPassword');
+            if (pw.value !== cpw.value) {
+              e.preventDefault();
+              e.stopPropagation();
+              cpw.setCustomValidity('Passwords do not match');
+              cpw.classList.add('is-invalid');
+            } else {
+              cpw.setCustomValidity('');
+              cpw.classList.remove('is-invalid');
+            }
+          });
+          document.getElementById('confirmPassword').addEventListener('input', function() {
+            this.setCustomValidity('');
+            this.classList.remove('is-invalid');
+          });
+        </script>
+    </div>
+    </div>

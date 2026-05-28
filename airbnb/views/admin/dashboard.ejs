@@ -1,0 +1,71 @@
+<% layout("layouts/boilerplate") %>
+<% const active = 'dashboard'; %>
+
+<div class="admin-shell">
+  <%- include("layout-nav", { active }) %>
+
+  <div class="admin-main">
+    <h2 class="mb-4">Dashboard</h2>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Users</div><div class="stat-value"><%= stats.totalUsers %></div><small class="text-muted"><%= stats.verifiedUsers %> verified</small></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Listings</div><div class="stat-value"><%= stats.totalListings %></div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Bookings</div><div class="stat-value"><%= stats.totalBookings %></div><small class="text-muted"><%= stats.pendingBookings %> pending</small></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value">$<%= stats.totalRevenue.toLocaleString() %></div><small class="text-muted"><%= stats.paidBookings %> paid</small></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Reviews</div><div class="stat-value"><%= stats.totalReviews %></div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-label">Messages</div><div class="stat-value"><%= stats.totalMessages %></div></div></div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-7">
+        <div class="admin-card">
+          <h5 class="mb-3">Recent bookings</h5>
+          <table class="admin-table">
+            <thead><tr><th>Listing</th><th>Guest</th><th>Dates</th><th>Status</th><th>Paid</th></tr></thead>
+            <tbody>
+              <% recentBookings.forEach(function(b) { %>
+                <tr>
+                  <td><%= b.listing ? b.listing.title : '(deleted)' %></td>
+                  <td><%= b.guest ? b.guest.username : '-' %></td>
+                  <td><%= new Date(b.checkIn).toLocaleDateString() %> → <%= new Date(b.checkOut).toLocaleDateString() %></td>
+                  <td><span class="pill pill-<%= b.status === 'confirmed' ? 'ok' : (b.status === 'cancelled' ? 'bad' : 'warn') %>"><%= b.status %></span></td>
+                  <td><%= b.paymentStatus %></td>
+                </tr>
+              <% }); %>
+              <% if (recentBookings.length === 0) { %><tr><td colspan="5" class="text-center text-muted">No bookings yet</td></tr><% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="admin-card mb-3">
+          <h5 class="mb-3">Recent signups</h5>
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Verified</th></tr></thead>
+            <tbody>
+              <% recentUsers.forEach(function(u) { %>
+                <tr>
+                  <td><%= u.username %><br><small class="text-muted"><%= u.email %></small></td>
+                  <td><%= u.isVerified ? '✅' : '—' %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-card">
+          <h5 class="mb-3">Top countries</h5>
+          <table class="admin-table">
+            <tbody>
+              <% topCountries.forEach(function(c) { %>
+                <tr><td><%= c._id || '(unset)' %></td><td class="text-end"><%= c.count %></td></tr>
+              <% }); %>
+              <% if (topCountries.length === 0) { %><tr><td class="text-muted">No listings yet</td></tr><% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

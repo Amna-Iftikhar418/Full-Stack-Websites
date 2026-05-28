@@ -1,0 +1,388 @@
+<% layout("layouts/boilerplate") -%>
+
+<div class="show-page-wrapper">
+
+  <!-- Hero Image / Gallery -->
+  <% const galleryImgs = (list.gallery && list.gallery.length) ? list.gallery : (list.image && list.image.url ? [list.image] : []); %>
+  <% const heroImg = galleryImgs[0] || { url: '/images/home.png' }; %>
+  <div class="show-hero-section">
+    <div class="show-hero-wrapper">
+      <img src="<%= heroImg.url %>" class="show-hero-image" alt="Listing Image">
+      <div class="show-hero-overlay"></div>
+      <div class="listing-badge">
+        <i class="fa-solid fa-star me-1"></i> Featured
+      </div>
+      <% if (list.isAvailable === false) { %>
+        <div class="listing-unavailable-badge">
+          <i class="fa-solid fa-ban me-1"></i> Unavailable
+        </div>
+      <% } %>
+      <div class="show-hero-caption">
+        <% if (list.category) { %>
+          <span class="show-hero-category-chip">
+            <i class="fa-solid fa-tag me-1"></i><%= list.category %>
+          </span>
+        <% } %>
+        <h1 class="show-hero-title"><%= list.title %></h1>
+        <p class="show-hero-location">
+          <i class="fa-solid fa-location-dot me-2"></i><%= list.location %>, <%= list.country %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <% if (galleryImgs.length > 1) { %>
+    <div class="container mt-3">
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <% galleryImgs.forEach(function(img, idx) { %>
+          <img src="<%= img.url %>" class="show-gallery-thumb" data-idx="<%= idx %>" alt="photo" style="width: 140px; height: 90px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent;">
+        <% }); %>
+      </div>
+    </div>
+    <script>
+      (function() {
+        var thumbs = document.querySelectorAll('.show-gallery-thumb');
+        var hero = document.querySelector('.show-hero-image');
+        thumbs.forEach(function(t) {
+          t.addEventListener('click', function() {
+            if (hero) hero.src = t.src;
+            thumbs.forEach(function(x) { x.style.borderColor = 'transparent'; });
+            t.style.borderColor = '#c14a2b';
+          });
+        });
+        if (thumbs[0]) thumbs[0].style.borderColor = '#c14a2b';
+      })();
+    </script>
+  <% } %>
+
+  <!-- Main Content: 2-column layout -->
+  <div class="container show-main-content">
+    <div class="row g-5">
+
+      <!-- Left: Listing Details -->
+      <div class="col-lg-7">
+
+        <!-- Host Bar -->
+        <div class="show-host-bar">
+          <div class="show-host-avatar">
+            <%= list.owner ? list.owner.username.charAt(0).toUpperCase() : '?' %>
+          </div>
+          <div>
+            <p class="show-host-label">Hosted by</p>
+            <p class="show-host-name">
+              <%= list.owner ? list.owner.username : 'Unknown' %>
+              <% if (hostStats && hostStats.isSuperhost) { %>
+                <span class="badge bg-warning text-dark ms-2" title="Hosts with 4.8+ avg rating, 90%+ response rate, 10+ bookings">
+                  <i class="fa-solid fa-medal me-1"></i>Superhost
+                </span>
+              <% } %>
+            </p>
+            <% if (hostStats) { %>
+              <p class="text-muted small mb-0">
+                <% if (hostStats.totalReviews > 0) { %>
+                  <i class="fa-solid fa-star text-warning"></i>
+                  <%= hostStats.avgRating %> · <%= hostStats.totalReviews %> reviews ·
+                <% } %>
+                <%= hostStats.responseRate %>% response rate
+              </p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Capacity -->
+        <% if (list.maxGuests || list.bedrooms || list.beds || list.bathrooms) { %>
+          <div class="show-capacity-chips">
+            <% if (list.maxGuests) { %>
+              <span class="show-capacity-chip"><i class="fa-solid fa-users"></i><%= list.maxGuests %> guests</span>
+            <% } %>
+            <% if (list.bedrooms) { %>
+              <span class="show-capacity-chip"><i class="fa-solid fa-bed"></i><%= list.bedrooms %> bedrooms</span>
+            <% } %>
+            <% if (list.beds) { %>
+              <span class="show-capacity-chip"><i class="fa-solid fa-mattress-pillow"></i><%= list.beds %> beds</span>
+            <% } %>
+            <% if (list.bathrooms) { %>
+              <span class="show-capacity-chip"><i class="fa-solid fa-bath"></i><%= list.bathrooms %> baths</span>
+            <% } %>
+          </div>
+        <% } %>
+
+        <hr class="show-divider">
+
+        <!-- Description -->
+        <div class="show-section mb-4">
+          <h3 class="show-section-title">About this place</h3>
+          <p class="show-description"><%= list.description %></p>
+        </div>
+
+        <% if (Array.isArray(list.amenities) && list.amenities.length) { %>
+          <hr class="show-divider">
+          <div class="show-section mb-4">
+            <h3 class="show-section-title"><i class="fa-solid fa-list-check me-2"></i>What this place offers</h3>
+            <%
+              const AMEN_LABEL = {
+                wifi: ['fa-wifi', 'Wi-Fi'],
+                kitchen: ['fa-utensils', 'Kitchen'],
+                parking: ['fa-square-parking', 'Parking'],
+                pool: ['fa-person-swimming', 'Pool'],
+                ac: ['fa-snowflake', 'Air conditioning'],
+                heating: ['fa-fire', 'Heating'],
+                washer: ['fa-shirt', 'Washer'],
+                tv: ['fa-tv', 'TV'],
+                workspace: ['fa-laptop', 'Workspace'],
+                pets: ['fa-paw', 'Pets allowed'],
+                gym: ['fa-dumbbell', 'Gym'],
+                breakfast: ['fa-mug-saucer', 'Breakfast']
+              };
+            %>
+            <div class="row g-3">
+              <% list.amenities.forEach(function(a) { %>
+                <% const meta = AMEN_LABEL[a] || ['fa-check', a]; %>
+                <div class="col-6 col-md-4">
+                  <div class="amenity-pill">
+                    <i class="fa-solid <%= meta[0] %>"></i>
+                    <span><%= meta[1] %></span>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+
+        <hr class="show-divider">
+
+        <!-- Location -->
+        <div class="show-section mb-4">
+          <h3 class="show-section-title">
+            <i class="fa-solid fa-location-dot me-2"></i>Where you'll be
+          </h3>
+          <p class="show-location-text">
+            <i class="fa-solid fa-map-pin me-2"></i><%= list.location %>, <%= list.country %>
+          </p>
+        </div>
+
+        <!-- Owner Actions -->
+        <% if (curruser && list.owner && String(curruser._id) === String(list.owner._id)) { %>
+        <hr class="show-divider">
+        <div class="listing-actions">
+          <form method="get" action="/listings/<%= list.id %>/edit">
+            <button class="btn-edit"><i class="fa-solid fa-pen me-2"></i>Edit Listing</button>
+          </form>
+          <form method="post" action="/listings/<%= list.id %>/availability">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <% if (list.isAvailable === false) { %>
+              <button type="submit" class="btn-edit" style="background: linear-gradient(135deg, #198754, #0f6848);">
+                <i class="fa-solid fa-check me-2"></i>Mark Available
+              </button>
+            <% } else { %>
+              <button type="submit" class="btn-edit" style="background: linear-gradient(135deg, #6c757d, #495057);">
+                <i class="fa-solid fa-ban me-2"></i>Mark Unavailable
+              </button>
+            <% } %>
+          </form>
+          <form method="post" action="/listings/<%= list.id %>?_method=DELETE">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn-delete"><i class="fa-solid fa-trash me-2"></i>Delete Listing</button>
+          </form>
+        </div>
+        <% } %>
+
+      </div>
+
+      <!-- Right: Sticky Booking Card -->
+      <div class="col-lg-5">
+        <div class="show-booking-sticky">
+          <div class="booking-card-glass">
+
+            <!-- Gradient Price -->
+            <div class="booking-glass-price-row">
+              <span class="booking-gradient-price">₹<%= list.price %></span>
+              <span class="booking-glass-period">/ night</span>
+            </div>
+
+            <% if (curruser) { %>
+              <% if (list.isAvailable === false) { %>
+                <button class="btn-book-now" disabled style="opacity: 0.6; cursor: not-allowed;">
+                  <i class="fa-solid fa-ban me-2"></i>Currently Unavailable
+                </button>
+                <p class="booking-hint">The host has paused bookings for this listing</p>
+              <% } else { %>
+                <a href="/listings/<%= list.id %>/bookings/new" class="btn-book-now">
+                  <i class="fa-solid fa-calendar-days me-2"></i>Book Now
+                </a>
+                <p class="booking-hint">Select your dates and complete your booking</p>
+              <% } %>
+
+              <% if (list.owner && String(curruser._id) !== String(list.owner._id)) { %>
+                <form action="/inbox/start" method="POST" class="mt-2">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <input type="hidden" name="listingId" value="<%= list.id %>">
+                  <input type="hidden" name="recipientId" value="<%= list.owner._id %>">
+                  <button type="submit" class="btn btn-outline-light w-100">
+                    <i class="fa-regular fa-envelope me-2"></i>Message host
+                  </button>
+                </form>
+              <% } %>
+            <% } else { %>
+              <div class="booking-login-message">
+                <i class="fa-solid fa-circle-info me-2"></i>
+                <a href="/login">Log in</a> or <a href="/signup">sign up</a> to book this listing
+              </div>
+            <% } %>
+
+            <!-- Existing Bookings -->
+            <% if (list.bookings && list.bookings.length > 0) { %>
+              <div class="existing-bookings mt-4">
+                <h5 class="existing-bookings-title">
+                  <i class="fa-solid fa-clock-rotate-left me-2"></i>Recent Bookings
+                </h5>
+                <div class="existing-bookings-list">
+                  <% for (let booking of list.bookings) { %>
+                    <% if (booking.status === 'confirmed' || booking.status === 'pending') { %>
+                      <div class="existing-booking-item">
+                        <div class="existing-booking-dates">
+                          <i class="fa-solid fa-calendar-day me-1"></i>
+                          <%= new Date(booking.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %> -
+                          <%= new Date(booking.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                          <% if (booking.guest) { %>
+                            <span class="text-muted ms-2">(<%= booking.guest.username %>)</span>
+                          <% } %>
+                        </div>
+                        <span class="existing-booking-status status-<%= booking.status %>">
+                          <% if (booking.status === 'confirmed') { %>
+                            <i class="fa-solid fa-check-circle me-1"></i>Confirmed
+                          <% } else if (booking.status === 'pending') { %>
+                            <i class="fa-solid fa-clock me-1"></i>Pending
+                          <% } %>
+                        </span>
+                      </div>
+                    <% } %>
+                  <% } %>
+                </div>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="show-map-section mt-5">
+      <h3 class="show-section-title mb-4">
+        <i class="fa-solid fa-map me-2"></i>Explore the location
+      </h3>
+      <div id="map" class="w-100 rounded-4 shadow" style="height: 400px;"
+        data-lat="<%= list.latitude ? list.latitude : 24.8607 %>"
+        data-lng="<%= list.longitude ? list.longitude : 67.0011 %>"
+        data-title="<%= list.title %>"
+        data-location="<%= list.location %>, <%= list.country %>">
+      </div>
+    </div>
+
+    <!-- Ratings Summary -->
+    <% if (overallAvg !== null) { %>
+      <div class="mt-5 text-center">
+        <i class="fa-solid fa-star text-warning" style="font-size: 42px; vertical-align: middle;"></i>
+        <span style="font-size: 44px; font-weight: 800; margin-left: 12px; vertical-align: middle;"><%= overallAvg %></span>
+        <span style="font-size: 28px; color: var(--text-secondary, #555); margin-left: 10px; vertical-align: middle;">· <%= list.reviews.length %> review<%= list.reviews.length === 1 ? '' : 's' %></span>
+      </div>
+    <% } %>
+
+    <!-- Leave a Review -->
+    <% if(curruser) { %>
+      <div class="review-form-card mt-5">
+        <h4 class="review-form-title mb-4">
+          <i class="fa-solid fa-pen-to-square me-2"></i>Leave a Review
+        </h4>
+        <form method="post" action="/listings/<%= list.id %>/reviews" novalidate class="needs-validation">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="mb-4">
+            <label class="review-rating-label mb-3">Your Overall Rating</label>
+            <fieldset class="starability-slot">
+              <legend>Rating</legend>
+              <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+
+          <div class="mb-4">
+            <label for="comments" class="form-label fw-semibold">Your Review</label>
+            <textarea cols="70" rows="4" name="review[comment]" id="comments" class="form-control review-textarea"
+              placeholder="Share your experience with this listing..." required></textarea>
+            <div class="invalid-feedback">Please fill this field</div>
+          </div>
+          <button class="btn-submit-review">
+            <i class="fa-solid fa-paper-plane me-2"></i>Submit Review
+          </button>
+        </form>
+      </div>
+    <% } %>
+
+    <!-- Reviews Section -->
+    <% if(list.reviews.length > 0) { %>
+      <div class="reviews-section mt-5 mb-5">
+        <h4 class="reviews-title mb-4">
+          <i class="fa-solid fa-comments me-2"></i>Guest Reviews
+          <span class="review-count"><%= list.reviews.length %></span>
+        </h4>
+        <div class="reviews-list">
+          <% for(let rev of list.reviews) { %>
+            <div class="review-item">
+              <div class="review-item-header">
+                <div class="review-item-author">
+                  <div class="review-item-avatar">
+                    <%=rev.author.username.charAt(0).toUpperCase()%>
+                  </div>
+                  <div class="review-item-info">
+                    <span class="review-item-name"><%=rev.author.username%></span>
+                    <span class="review-item-date"><%= rev.createdAt.toDateString() %></span>
+                  </div>
+                </div>
+                <div class="review-item-rating">
+                  <% for(let i=0; i<rev.rating; i++) { %><i class="fa-solid fa-star"></i><% } %>
+                  <% for(let i=rev.rating; i<5; i++) { %><i class="fa-regular fa-star"></i><% } %>
+                </div>
+              </div>
+              <p class="review-item-text"><%= rev.comment %></p>
+              <div class="review-item-footer">
+                <span class="review-item-time">
+                  <%
+                    const reviewDate = new Date(rev.createdAt);
+                    const options = {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    };
+                  %>
+                  <%= reviewDate.toLocaleDateString('en-US', options) %>
+                </span>
+                <form method="post" action="/listings/<%= list.id %>/reviews/<%= rev.id %>?_method=DELETE">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="btn-delete-review-sm">Delete</button>
+                </form>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- Map script -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/map.js"></script>

@@ -1,0 +1,35 @@
+<% layout("layouts/boilerplate") %>
+<% const active = 'reviews'; %>
+
+<div class="admin-shell">
+  <%- include("layout-nav", { active }) %>
+
+  <div class="admin-main">
+    <h2 class="mb-3">Reviews</h2>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Author</th><th>Rating</th><th>Comment</th><th>Date</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% reviews.forEach(function(r) { %>
+            <tr>
+              <td><%= r.author ? r.author.username : '—' %></td>
+              <td><%= r.rating %>★</td>
+              <td style="max-width: 400px;"><%= r.comment %></td>
+              <td><small><%= r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' %></small></td>
+              <td class="text-end">
+                <form method="POST" action="/admin/reviews/<%= r._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Delete this review?')">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+          <% if (reviews.length === 0) { %><tr><td colspan="5" class="text-center text-muted">No reviews yet</td></tr><% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

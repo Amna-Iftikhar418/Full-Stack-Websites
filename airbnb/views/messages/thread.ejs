@@ -1,0 +1,66 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .thread-wrap { max-width: 800px; margin: 0 auto; }
+  .thread-header { background: #fff; border: 1px solid #eee; border-radius: 12px 12px 0 0; padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
+  .thread-avatar { width: 44px; height: 44px; border-radius: 50%; background: #c14a2b; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+  .thread-body { background: #fafafa; border-left: 1px solid #eee; border-right: 1px solid #eee; padding: 18px; min-height: 360px; max-height: 500px; overflow-y: auto; }
+  .msg { display: flex; margin-bottom: 10px; }
+  .msg.mine { justify-content: flex-end; }
+  .msg-bubble { max-width: 70%; padding: 10px 14px; border-radius: 16px; background: #fff; border: 1px solid #eee; }
+  .msg.mine .msg-bubble { background: #c14a2b; color: #fff; border-color: #c14a2b; }
+  .msg-meta { font-size: 11px; color: #999; margin-top: 3px; }
+  .msg.mine .msg-meta { text-align: right; }
+  .composer { background: #fff; border: 1px solid #eee; border-top: none; border-radius: 0 0 12px 12px; padding: 12px; display: flex; gap: 8px; }
+  .composer textarea { flex: 1; resize: none; border: 1px solid #ddd; border-radius: 10px; padding: 8px 12px; }
+</style>
+
+<div class="thread-wrap">
+  <a href="/inbox" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-arrow-left"></i> Inbox</a>
+
+  <% const other = conversation.participants.find(p => String(p._id) !== currentUserId) || conversation.participants[0]; %>
+
+  <div class="thread-header">
+    <% if (other.profileImage && other.profileImage.url) { %>
+      <img src="<%= other.profileImage.url %>" class="thread-avatar" style="object-fit: cover;">
+    <% } else { %>
+      <div class="thread-avatar"><%= (other.username || '?').charAt(0).toUpperCase() %></div>
+    <% } %>
+    <div>
+      <div style="font-weight: 600;"><%= other.username %></div>
+      <% if (conversation.listing) { %>
+        <small class="text-muted">About: <a href="/listings/<%= conversation.listing._id %>"><%= conversation.listing.title %></a></small>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="thread-body" id="thread-body">
+    <% if (messages.length === 0) { %>
+      <p class="text-center text-muted mt-5">No messages yet. Say hello!</p>
+    <% } %>
+    <% messages.forEach(function(m) { %>
+      <% const mine = String(m.sender._id) === currentUserId; %>
+      <div class="msg <%= mine ? 'mine' : '' %>">
+        <div>
+          <div class="msg-bubble"><%= m.body %></div>
+          <div class="msg-meta">
+            <%= mine ? 'You' : m.sender.username %> · <%= new Date(m.createdAt).toLocaleString() %>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <form class="composer" action="/inbox/<%= conversation._id %>/messages" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <textarea name="body" rows="2" placeholder="Type a message..." maxlength="4000" required></textarea>
+    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+</div>
+
+<script>
+  (function() {
+    var body = document.getElementById('thread-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  })();
+</script>

@@ -1,0 +1,155 @@
+# ===========================
+# Heavy Dependencies
+# ===========================
+node_modules/
+vendor/
+.pnp/
+.pnp.js
+bower_components/
+
+# ===========================
+# Build Output
+# ===========================
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.nuxt/
+.output/
+.svelte-kit/
+.vercel/
+claude.md/
+# ===========================
+# Package Manager Caches
+# ===========================
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.pnpm-store/
+.cache/
+
+# ===========================
+# Large Media & Assets
+# ===========================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xcf
+
+# ===========================
+# Large Archives
+# ===========================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+
+# ===========================
+# Database Files
+# ===========================
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+dump.rdb
+
+# ===========================
+# Environment & Secrets
+# ===========================
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# ===========================
+# Logs
+# ===========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+server.log
+server_err.log
+
+# ===========================
+# Coverage & Testing
+# ===========================
+coverage/
+.nyc_output/
+.jest-cache/
+
+# ===========================
+# Temp & Upload Folders
+# ===========================
+tmp/
+temp/
+uploads/
+.temp/
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===========================
+# IDE / Editor
+# ===========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace
+
+# ===========================
+# Python (if any scripts)
+# ===========================
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# ===========================
+# Misc
+# ===========================
+*.bak
+*.tmp
+*.orig
+.parcel-cache/
+.turbo/

@@ -1,0 +1,245 @@
+<% layout("layouts/boilerplate") -%>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<div class="booking-page-wrapper">
+
+  <!-- Page Header -->
+  <div class="booking-page-header">
+    <div class="container booking-header-inner">
+      <a href="/listings/<%= listing.id %>" class="booking-back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back to listing</span>
+      </a>
+      <h2 class="booking-page-title">Complete your booking</h2>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container booking-page-content">
+    <div class="row g-5 align-items-start">
+
+      <!-- Left: Listing Summary -->
+      <div class="col-lg-5">
+        <% const coverUrl = (listing.images && listing.images.length && listing.images[0].url) || (listing.image && listing.image.url) || '/images/home.png'; %>
+        <div class="booking-summary-card">
+          <div class="booking-summary-img-wrapper">
+            <img src="<%= coverUrl %>" alt="<%= listing.title %>" class="booking-summary-img">
+            <div class="booking-summary-img-overlay"></div>
+          </div>
+          <div class="booking-summary-body">
+            <h4 class="booking-summary-title"><%= listing.title %></h4>
+            <p class="booking-summary-location">
+              <i class="fa-solid fa-location-dot me-2"></i><%= listing.location %>, <%= listing.country %>
+            </p>
+            <div class="booking-summary-divider"></div>
+            <div class="booking-summary-price-row">
+              <span class="booking-summary-price-label">Price per night</span>
+              <span class="booking-summary-price-value">₹<%= listing.price %></span>
+            </div>
+            <p class="booking-summary-hint">
+              <i class="fa-solid fa-circle-info me-2"></i>Select your dates to see the total
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Booking Form -->
+      <div class="col-lg-7">
+        <form method="post" action="/listings/<%= listing.id %>/bookings" class="needs-validation" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <!-- Date Card -->
+          <div class="booking-form-card mb-4">
+            <h5 class="booking-form-section-title">
+              <i class="fa-solid fa-calendar-days me-2"></i>Choose your dates
+            </h5>
+            <p class="text-muted small mb-2">
+              Minimum stay: <strong><%= listing.minStay || 1 %></strong> night(s) ·
+              Max guests: <strong><%= listing.maxGuests || 1 %></strong>
+            </p>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label class="booking-field-label" for="dateRange">Check-in → Check-out</label>
+                <input class="booking-date-input form-control" id="dateRange" type="text" placeholder="Select your dates" readonly required>
+                <input type="hidden" id="checkIn" name="checkIn" required>
+                <input type="hidden" id="checkOut" name="checkOut" required>
+                <div class="invalid-feedback">Please select both dates</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guests Card -->
+          <div class="booking-form-card mb-4">
+            <h5 class="booking-form-section-title">
+              <i class="fa-solid fa-users me-2"></i>Who's coming?
+            </h5>
+            <label class="booking-field-label" for="guests">Number of guests</label>
+            <div class="booking-guests-select-wrapper">
+              <i class="fa-solid fa-user-group booking-guests-icon"></i>
+              <select class="booking-guests-select" id="guests" name="guests" required>
+                <option value="1" selected>1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5 Guests</option>
+                <option value="6">6 Guests</option>
+                <option value="7">7 Guests</option>
+                <option value="8">8 Guests</option>
+              </select>
+            </div>
+            <div class="invalid-feedback">Please select number of guests</div>
+          </div>
+
+          <!-- Price Breakdown Card -->
+          <div class="booking-form-card booking-price-card mb-4">
+            <h5 class="booking-form-section-title">
+              <i class="fa-solid fa-receipt me-2"></i>Price summary
+            </h5>
+
+            <!-- Placeholder -->
+            <div id="pricePlaceholder" class="booking-price-placeholder">
+              <i class="fa-solid fa-calendar-check fa-2x mb-3"></i>
+              <p>Select your dates to see the total price</p>
+            </div>
+
+            <!-- Breakdown (hidden until dates selected) -->
+            <div id="priceBreakdown" class="d-none">
+              <div class="booking-price-row">
+                <span>₹<%= listing.price %> × <span id="nightsCount">0</span> night(s)</span>
+                <span id="baseAmount" class="fw-semibold">₹0</span>
+              </div>
+              <div class="booking-price-row d-none" id="discountRow">
+                <span>Discount (<span id="discountPercent">0</span>%)</span>
+                <span id="discountAmount" class="fw-semibold text-success">-₹0</span>
+              </div>
+              <div class="booking-price-row d-none" id="cleaningRow">
+                <span>Cleaning fee</span>
+                <span id="cleaningFee" class="fw-semibold">₹0</span>
+              </div>
+              <div class="booking-price-row">
+                <span>Service fee</span>
+                <span id="serviceFee" class="fw-semibold">₹0</span>
+              </div>
+              <div class="booking-price-row">
+                <span>Taxes</span>
+                <span id="taxes" class="fw-semibold">₹0</span>
+              </div>
+              <div class="booking-price-total-row">
+                <span class="booking-price-total-label">Total</span>
+                <span id="totalPriceBold" class="booking-price-total-value">₹0</span>
+              </div>
+            </div>
+
+            <!-- Availability Message -->
+            <div id="availabilityMessage" class="d-none mt-3"></div>
+          </div>
+
+          <!-- Submit -->
+          <button class="booking-confirm-btn" type="submit">
+            <i class="fa-solid fa-check-circle me-2"></i>Confirm Booking
+          </button>
+          <p class="booking-confirm-note">You won't be charged yet</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const checkInInput = document.getElementById('checkIn');
+  const checkOutInput = document.getElementById('checkOut');
+  const listingId = '<%- listing.id %>';
+  const minStay = <%- JSON.stringify(listing.minStay || 1) %>;
+
+  function fmt(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
+
+  function renderQuote(q) {
+    document.getElementById('nightsCount').textContent = q.nights;
+    document.getElementById('baseAmount').textContent = fmt(q.baseAmount);
+
+    const discountRow = document.getElementById('discountRow');
+    if (q.discountAmount > 0) {
+      document.getElementById('discountPercent').textContent = q.discountPercent;
+      document.getElementById('discountAmount').textContent = '-' + fmt(q.discountAmount);
+      discountRow.classList.remove('d-none');
+    } else {
+      discountRow.classList.add('d-none');
+    }
+
+    const cleaningRow = document.getElementById('cleaningRow');
+    if (q.cleaningFee > 0) {
+      document.getElementById('cleaningFee').textContent = fmt(q.cleaningFee);
+      cleaningRow.classList.remove('d-none');
+    } else {
+      cleaningRow.classList.add('d-none');
+    }
+
+    document.getElementById('serviceFee').textContent = fmt(q.serviceFee);
+    document.getElementById('taxes').textContent = fmt(q.taxes);
+    document.getElementById('totalPriceBold').textContent = fmt(q.total);
+
+    document.getElementById('priceBreakdown').classList.remove('d-none');
+    document.getElementById('pricePlaceholder').classList.add('d-none');
+  }
+
+  function showAvailability(msg, ok) {
+    const availMsg = document.getElementById('availabilityMessage');
+    availMsg.innerHTML = '';
+    const el = document.createElement('div');
+    el.className = 'booking-avail-alert booking-avail-' + (ok ? 'ok' : 'err');
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid me-2 ' + (ok ? 'fa-check-circle' : 'fa-triangle-exclamation');
+    el.appendChild(icon);
+    el.appendChild(document.createTextNode(msg));
+    availMsg.appendChild(el);
+    availMsg.classList.remove('d-none');
+  }
+
+  function fetchAll(checkIn, checkOut) {
+    const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+    if (nights < minStay) {
+      showAvailability('This listing requires a minimum stay of ' + minStay + ' night(s).', false);
+      document.getElementById('priceBreakdown').classList.add('d-none');
+      return;
+    }
+
+    fetch('/listings/' + listingId + '/bookings/availability?checkIn=' + checkIn + '&checkOut=' + checkOut)
+      .then(r => r.json())
+      .then(data => showAvailability(data.message, data.available))
+      .catch(() => {});
+
+    fetch('/listings/' + listingId + '/bookings/quote?checkIn=' + checkIn + '&checkOut=' + checkOut)
+      .then(r => r.json())
+      .then(q => { if (!q.error) renderQuote(q); })
+      .catch(() => {});
+  }
+
+  // Load booked dates and init flatpickr range picker
+  fetch('/listings/' + listingId + '/bookings/booked-dates')
+    .then(r => r.json())
+    .then(data => {
+      flatpickr('#dateRange', {
+        mode: 'range',
+        minDate: 'today',
+        dateFormat: 'Y-m-d',
+        disable: data.bookedDates || [],
+        onChange: function(selectedDates, dateStr) {
+          if (selectedDates.length === 2) {
+            const [a, b] = selectedDates;
+            const iso = (d) => d.toISOString().split('T')[0];
+            checkInInput.value = iso(a);
+            checkOutInput.value = iso(b);
+            fetchAll(checkInInput.value, checkOutInput.value);
+          }
+        }
+      });
+    })
+    .catch(() => {
+      flatpickr('#dateRange', { mode: 'range', minDate: 'today', dateFormat: 'Y-m-d' });
+    });
+})();
+</script>

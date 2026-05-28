@@ -1,0 +1,40 @@
+.components{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 80px;
+}
+.box{
+    border: none;
+     background: linear-gradient( #090139, #221761,#3b0146);
+    width: 250px;
+    height: 350px;
+    border-radius: 20px;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.box h2,p{
+   max-width: 100%;
+}
+.box p{
+    text-align: start;
+    color: rgb(199, 198, 198);
+}
+.box img{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.Frame-box{
+    padding: 20px;
+
+}
+.Frame-heading{
+    padding-top: 60px;
+    margin-left: 100px;
+    margin-bottom: 20px;
+}

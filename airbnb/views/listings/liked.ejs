@@ -1,0 +1,146 @@
+<% layout("layouts/boilerplate") -%>
+<div style="padding-top: 20px;">
+<div>
+  <h2 style="margin-bottom: 30px;">
+    <i class="fa-solid fa-heart text-danger"></i> My Liked Listings
+  </h2>
+
+  <% if (allListings.length === 0) { %>
+    <div class="alert alert-info text-center" role="alert">
+      <i class="fa-regular fa-heart fa-3x mb-3"></i>
+      <h5>No liked listings yet!</h5>
+      <p>Click the heart icon on any listing to add it to your favorites.</p>
+      <a href="/listings" class="btn btn-primary mt-2">
+        <i class="fa-solid fa-compass"></i> Explore Listings
+      </a>
+    </div>
+  <% } else { %>
+    <div class="index row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+      <% for (let listing of allListings) { %>
+        <div class="col">
+          <a href="/listings/<%= listing.id %>" class="text-decoration-none text-dark">
+            <div class="card index-card shadow-sm border-0 rounded-4 overflow-hidden h-100">
+              <!-- Image -->
+              <div class="image-wrapper">
+                <img src="<%= listing.image.url %>" class="index-card-img-top" alt="listing_image">
+                <div class="image-overlay"></div>
+
+                <!-- Category Badge -->
+                <% if (listing.category) { %>
+                  <div class="category-badge">
+                    <i class="fa-solid fa-location-dot"></i> <%= listing.category %>
+                  </div>
+                <% } %>
+
+                <!-- Favorite Button -->
+                <% if (curruser) { %>
+                  <button class="favorite-btn like-btn" data-listing-id="<%= listing._id %>" data-liked="true">
+                    <i class="fa-solid fa-heart text-danger"></i>
+                  </button>
+                <% } %>
+              </div>
+
+              <!-- Body -->
+              <div class="index-card-body">
+                <h5 class="card-title text-truncate"><%= listing.title %></h5>
+
+                <p class="location-text mb-2">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <%= listing.location || "Location available" %>
+                </p>
+
+                <div class="price-section">
+                  <span class="price-amount">&#8377;<%= listing.price %></span>
+                  <span class="price-period">/ night</span>
+                </div>
+
+                <div class="availability">
+                  <i class="fa-regular fa-calendar"></i>
+                  <span>Available from: <strong><%= listing.formattedDate || "Contact host" %></strong></span>
+                </div>
+              </div>
+
+            </div>
+          </a>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+</div>
+
+<script>
+  // Like Button functionality (same as index.ejs)
+  document.addEventListener('DOMContentLoaded', function() {
+    const likeButtons = document.querySelectorAll('.like-btn');
+    
+    likeButtons.forEach(button => {
+      button.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const listingId = this.dataset.listingId;
+        const icon = this.querySelector('i');
+        
+        try {
+          const response = await fetch(`/listings/${listingId}/like`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            // If unliked, remove the card with animation
+            if (!data.liked) {
+              const card = this.closest('.col');
+              card.style.transition = 'opacity 0.3s ease';
+              card.style.opacity = '0';
+              setTimeout(() => {
+                card.remove();
+                
+                // Check if no listings left
+                const remainingCards = document.querySelectorAll('.col');
+                if (remainingCards.length === 0) {
+                  location.reload();
+                }
+              }, 300);
+            }
+            
+            // Update navbar badge
+            updateLikeBadge(data.count);
+          }
+        } catch (error) {
+          console.error('Error toggling like:', error);
+        }
+      });
+    });
+    
+    function updateLikeBadge(count) {
+      const heartIcons = document.querySelectorAll('.fa-heart');
+      heartIcons.forEach(icon => {
+        const btn = icon.closest('.btn');
+        if (btn && btn.href && btn.href.includes('/listings/liked')) {
+          const badge = btn.querySelector('.badge');
+          if (count > 0) {
+            if (badge) {
+              badge.textContent = count;
+            } else {
+              const badge = document.createElement('span');
+              badge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+              badge.textContent = count;
+              btn.appendChild(badge);
+            }
+          } else {
+            if (badge) {
+              badge.remove();
+            }
+          }
+        }
+      });
+    }
+  });
+</script>

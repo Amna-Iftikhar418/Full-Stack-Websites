@@ -1,0 +1,169 @@
+<% layout("layouts/boilerplate") -%>
+
+<div class="row mt-4">
+  <div class="col-8 offset-2">
+    <div class="home-icon  w-100" style="height: 70px;">
+
+      <div class="d-flex gap-2 ">
+        <div class="d-flex justify-content-center align-items-center gap-3 ">
+          <img class="home animated-images" width="70px" src="/images/edit.png" alt="">
+
+          <div>
+
+            <h3><b>EDIT YOUR LIST</b></h3>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+
+    <form method="post" action="/listings/<%= list.id %>?_method=PUT&_csrf=<%= csrfToken %>" class="needs-validation" novalidate
+      enctype="multipart/form-data">
+
+      <div class="mb-2">
+        <label class="form-label" for="title">Title:</label>
+        <input class="form-control" name="title" type="text" value="<%= list.title %>" required>
+        <div class="invalid-feedback">Please fill this field</div>
+      </div>
+
+
+      <div class="mb-2">
+
+        <label class="form-label" for="description">Description:</label>
+        <textarea class="form-control" name="description" required><%= list.description %></textarea>
+
+        <div class="invalid-feedback">Please enter descrition here</div>
+      </div>
+
+      <!-- <div class="mb-2">
+      <label class="form-label" for="image">Image:</label>
+        <input class="form-control" name="image" type="file" value="<%= list.image %>">
+     
+        </div> -->
+
+      <div class="mb-2">
+        <label class="form-label">Current gallery:</label>
+        <div class="d-flex flex-wrap gap-2">
+          <% const gallery = (typeof list.gallery !== 'undefined' && list.gallery.length) ? list.gallery : (list.image && list.image.url ? [list.image] : []); %>
+          <% gallery.forEach(function(img) { %>
+            <img src="<%= img.url %>" alt="image" style="width:120px; height:90px; object-fit:cover; border-radius:6px;">
+          <% }); %>
+          <% if (gallery.length === 0) { %>
+            <small class="text-muted">No image uploaded yet.</small>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label" for="images">Replace / add images (optional):</label>
+        <input class="form-control" id="images" name="images" type="file" accept="image/jpeg,image/png,image/jpg,image/webp" multiple>
+        <small class="text-muted">Uploading new images will replace the current gallery.</small>
+      </div>
+
+
+
+      <div class="row">
+
+        <div class="mb-2 col-md-4">
+          <label class="form-label" for="price">Price:</label>
+
+          <input class="form-control" name="price" type="number" min="1" step="0.01" value="<%= list.price %>" required>
+
+          <div class="invalid-feedback">Please enter a valid price</div>
+        </div>
+        <div class="mb-2  col-md-8">
+          <label class="form-label" for="country">Country:</label>
+          <input class="form-control" name="country" type="text" value="<%= list.country %>" required>
+          <div class="invalid-feedback">Please enter valid country name</div>
+        </div>
+
+      </div>
+
+
+      <div class="mb-2">
+
+        <label class="form-label" for="location">Location:</label>
+        <input class="form-control" name="location" type="text" value="<%= list.location %>" required>
+        <div class="invalid-feedback">Please enter valid location</div>
+      </div>
+
+      <h5 class="mt-4 mb-2">Capacity</h5>
+      <div class="row">
+        <div class="mb-2 col-md-3">
+          <label class="form-label" for="maxGuests">Max guests</label>
+          <input class="form-control" name="maxGuests" id="maxGuests" type="number" min="1" step="1" value="<%= list.maxGuests || 2 %>">
+        </div>
+        <div class="mb-2 col-md-3">
+          <label class="form-label" for="bedrooms">Bedrooms</label>
+          <input class="form-control" name="bedrooms" id="bedrooms" type="number" min="0" step="1" value="<%= list.bedrooms || 1 %>">
+        </div>
+        <div class="mb-2 col-md-3">
+          <label class="form-label" for="beds">Beds</label>
+          <input class="form-control" name="beds" id="beds" type="number" min="0" step="1" value="<%= list.beds || 1 %>">
+        </div>
+        <div class="mb-2 col-md-3">
+          <label class="form-label" for="bathrooms">Bathrooms</label>
+          <input class="form-control" name="bathrooms" id="bathrooms" type="number" min="0" step="0.5" value="<%= list.bathrooms || 1 %>">
+        </div>
+      </div>
+
+      <h5 class="mt-3 mb-2">Pricing options</h5>
+      <div class="row">
+        <div class="mb-2 col-md-4">
+          <label class="form-label" for="cleaningFee">Cleaning fee (₹)</label>
+          <input class="form-control" name="cleaningFee" id="cleaningFee" type="number" min="0" step="1" value="<%= list.cleaningFee || 0 %>">
+        </div>
+        <div class="mb-2 col-md-4">
+          <label class="form-label" for="weeklyDiscount">Weekly discount (%)</label>
+          <input class="form-control" name="weeklyDiscount" id="weeklyDiscount" type="number" min="0" max="50" step="1" value="<%= list.weeklyDiscount || 0 %>">
+        </div>
+        <div class="mb-2 col-md-4">
+          <label class="form-label" for="monthlyDiscount">Monthly discount (%)</label>
+          <input class="form-control" name="monthlyDiscount" id="monthlyDiscount" type="number" min="0" max="50" step="1" value="<%= list.monthlyDiscount || 0 %>">
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label" for="minStay">Minimum stay (nights)</label>
+        <input class="form-control" name="minStay" id="minStay" type="number" min="1" step="1" value="<%= list.minStay || 1 %>" style="max-width:180px;">
+      </div>
+
+      <h5 class="mt-3 mb-2">Amenities</h5>
+      <div class="row mb-3">
+        <% const amenityList = [
+          { key: 'wifi', label: 'Wi‑Fi' },
+          { key: 'kitchen', label: 'Kitchen' },
+          { key: 'parking', label: 'Parking' },
+          { key: 'pool', label: 'Pool' },
+          { key: 'ac', label: 'Air conditioning' },
+          { key: 'heating', label: 'Heating' },
+          { key: 'washer', label: 'Washer' },
+          { key: 'tv', label: 'TV' },
+          { key: 'workspace', label: 'Workspace' },
+          { key: 'pets', label: 'Pets allowed' },
+          { key: 'gym', label: 'Gym' },
+          { key: 'breakfast', label: 'Breakfast' }
+        ]; %>
+        <% const existing = Array.isArray(list.amenities) ? list.amenities : []; %>
+        <% amenityList.forEach(function(a) { %>
+          <div class="col-6 col-md-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="amenities" value="<%= a.key %>" id="amen-<%= a.key %>" <%= existing.includes(a.key) ? 'checked' : '' %>>
+              <label class="form-check-label" for="amen-<%= a.key %>"><%= a.label %></label>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <button class="btn btn-dark add-btn w-100 mb-4">Edit</button>
+    </form>
+
+
+  </div>
+</div>

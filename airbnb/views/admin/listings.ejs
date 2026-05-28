@@ -1,0 +1,38 @@
+<% layout("layouts/boilerplate") %>
+<% const active = 'listings'; %>
+
+<div class="admin-shell">
+  <%- include("layout-nav", { active }) %>
+
+  <div class="admin-main">
+    <h2 class="mb-3">Listings</h2>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr><th></th><th>Title</th><th>Owner</th><th>Country</th><th>Category</th><th>Price</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% listings.forEach(function(l) { %>
+            <% const cover = (l.images && l.images.length && l.images[0].url) || (l.image && l.image.url); %>
+            <tr>
+              <td><% if (cover) { %><img src="<%= cover %>" style="width: 60px; height: 44px; object-fit: cover; border-radius: 4px;"><% } %></td>
+              <td><a href="/listings/<%= l._id %>" target="_blank"><%= l.title %></a></td>
+              <td><%= l.owner ? l.owner.username : '—' %></td>
+              <td><%= l.country || '—' %></td>
+              <td><%= l.category %></td>
+              <td>$<%= l.price %></td>
+              <td class="text-end">
+                <form method="POST" action="/admin/listings/<%= l._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Delete this listing?')">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+          <% if (listings.length === 0) { %><tr><td colspan="7" class="text-center text-muted">No listings yet</td></tr><% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

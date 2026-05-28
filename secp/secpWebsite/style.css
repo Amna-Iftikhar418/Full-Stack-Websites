@@ -1,0 +1,763 @@
+.navbar {
+    border-top: 5px solid rgb(70, 140, 238);
+    display: flex;
+    width: 100%;
+    height: 150px;
+    gap: 20px;
+    flex-direction: column;
+    margin-top: -9px;
+    padding: 0px;
+
+}
+
+.navbar-common {
+    background-color: rgb(214, 155, 210);
+    min-width: 130px;
+    height: 200px;
+    display: inline;
+
+
+}
+
+.navbar-list {
+    display: flex;
+    gap: 30px;
+    list-style-type: none;
+    justify-content: end;
+    align-items: top;
+
+
+
+
+}
+
+.navbar-content {
+    padding-right: 20px;
+    justify-items: center;
+    display: inline;
+    background-color: rgb(112, 233, 225);
+    width: 450px;
+    height: 55px;
+}
+
+.navbar-logo {
+    display: flex;
+    gap: 30px;
+    padding-left: 20px;
+    background-color: white;
+
+}
+
+.navbar-panel-list {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    list-style-type: none;
+    border-right: 1px solid rgb(188, 82, 82);
+}
+
+.list {
+    border-right: 1px solid white;
+    padding-right: 7px;
+}
+
+.box {
+    display: flex;
+    justify-content: end;
+    height: 350px;
+}
+
+.navbar-panel {
+    background-color: rgb(112, 233, 225);
+}
+
+.image {
+    background-image: url("images/background.jpg");
+
+    max-width: 100%;
+    height: 450px;
+
+    margin-top: 90px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+
+}
+
+.division {
+
+    color: white;
+    background-color: rgb(143, 134, 150);
+    width: 450px;
+    height: 100px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: xx-large;
+    background: rgba(110, 116, 114, 0.6);
+
+}
+
+.firstblock {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    justify-content: center;
+    margin-top: -100px;
+}
+
+.division1 {
+    background: linear-gradient(to right, #3E9462, #bef0d3);
+    width: 300px;
+    height: 250px;
+    margin: 30px;
+    border-radius: 17px;
+    color: white;
+
+
+
+}
+
+.a11 {
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.fb {
+    font-weight: bold;
+
+    font-size: 50px;
+}
+
+.li1 {
+    border-bottom: 2px solid black;
+}
+
+.anchor1 {
+    color: white;
+}
+
+.firstblock1 {
+    margin-top: -150px;
+    height: 350px;
+}
+
+/* contact us */
+.bg1 {
+    background-color: rgb(16, 67, 16);
+    max-width: 100%;
+    height: 100px;
+    margin-top: 50px;
+
+    padding-top: 30px;
+    padding-left: 50px;
+    color: white;
+}
+
+.about-sec1 {
+    color: gray;
+    margin-bottom: -10px;
+    font-weight: lighter;
+
+}
+
+.section2 {
+    background-color: white;
+    height: 550px;
+    max-width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.section {
+
+    background-color: white;
+    height: 300px;
+
+}
+
+.sec1 {
+    width: 800px;
+    margin-left: 30px;
+    margin-top: 40px;
+    height: 400px;
+    text-align: justify;
+    padding: 20px;
+}
+
+.sec1-h1 {
+    font-size: medium;
+    font-weight: bolder;
+}
+
+.sec1-p1 {
+    font-size: smaller;
+    font-weight: 100;
+    color: grey;
+}
+
+.sec2 {
+    background-color: rgb(117, 114, 114);
+    margin-top: 90px;
+    margin-right: 40px;
+    width: 400px;
+    height: 350px;
+    padding: 30px;
+}
+
+.sec2-icon {
+    color: white;
+    font-size: 40px;
+
+    font-weight: bolder;
+
+}
+
+.sec2-color {
+    color: white;
+}
+
+.sec2-p1 {
+    color: rgb(195, 197, 190);
+    font-size: 15px;
+    font-weight: lighter;
+}
+
+.sec2-p2 {
+    color: white;
+    font-size: 17px;
+    font-weight: lighter;
+}
+
+.icon1 {
+    width: 700px;
+    height: 150px;
+
+    display: flex;
+    gap: 15px;
+
+}
+
+.icon2 {
+    height: 120px;
+    width: 250px;
+    border-right: 2px solid rgb(199, 203, 200);
+    display: flex;
+    flex-direction: horizontal;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.font1 {
+    color: green;
+    font-size: 80px;
+}
+
+.font2 {
+    text-align: center;
+}
+
+/* section 3 */
+.section3 {
+    max-width: 100%;
+    height: 450px;
+    background-color: white;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.sec3 {
+    border-radius: 2px solid black;
+    height: 350px;
+    width: 350px;
+    background: linear-gradient(to bottom, #055627, #669c7c);
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px rgb(47, 75, 50);
+}
+
+.sec3in a {
+    color: white;
+    text-decoration: none;
+
+}
+
+.sec3in a:hover {
+    text-decoration: none;
+    color: aquamarine;
+}
+
+.sec3in {
+    text-align: center;
+    margin-top: 70px;
+}
+
+button {
+    width: 80px;
+    height: 30px;
+}
+
+button:hover {
+    background-color: cadetblue;
+}
+
+/* about us */
+.about-sec1 {
+    background-image: url(images/greenbackground.jpg);
+    max-width: 100%;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 40px;
+
+}
+
+.about-sec1-icon {
+    color: rgb(229, 223, 223);
+    font-size: small;
+    font-weight: lighter;
+    padding-top: 30px;
+    margin-left: 30px;
+}
+
+.about-sec1-h1 {
+    color: white;
+    margin-top: -18px;
+    margin-left: 30px;
+}
+
+/* sec2 */
+.about-sec2 {
+    background-color: white;
+    height: 400px;
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.about-sec2-divs {
+    background-color: white;
+    width: 400px;
+    height: 400px;
+}
+
+.about-sec2-div1 h1:hover {
+    color: rgb(101, 173, 39);
+}
+
+.about-sec2-div1 h1 {
+    margin-left: 20px;
+}
+
+.about-sec2-div1 p:hover {
+    color: rgb(101, 173, 39);
+}
+
+.about-sec2-div1 p {
+    margin-left: 20px;
+}
+
+.about-sec2-div1 {
+    background-color: rgb(232, 229, 229);
+
+}
+
+.about-sec2-div2 {
+    width: 800px;
+    font-weight: lighter;
+    color: rgb(66, 64, 64);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.footer {
+    max-width: 100%;
+    height: 100px;
+    background-color: #295b3e;
+
+    display: flex;
+
+
+
+}
+
+.footer-f1 {
+    color: white;
+    margin-left: 70px;
+    font-size: 11px;
+    margin-top: 20px;
+}
+
+.footer-f2 {
+    background-image: url(images/jamapunji_parkash_parmar.png);
+    width: 300px;
+    height: 70px;
+    margin-top: 15px;
+    margin-left: 190px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: contain;
+
+}
+
+/* copywright */
+.footer2 {
+    max-width: 100%;
+    height: 40px;
+    display: flex;
+    gap: 600px;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.footer2-list {
+    display: flex;
+    flex-direction: rows;
+    gap: 35px;
+    margin-right: 45px;
+}
+
+/* leap */
+.header {
+    margin: 0px;
+    padding-right: 10px;
+    padding-left: 80px;
+    height: 130px;
+    max-width: 100%;
+    background-color: rgb(243, 243, 243);
+    display: flex;
+
+}
+
+.head-bg1 {
+    background-image: url(images/leap-logo.png);
+    height: 90px;
+    width: 150px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 25px;
+    margin-right: 10px;
+}
+
+.head-bg2 {
+    height: 80px;
+    width: 2px;
+    background-color: black;
+    margin-top: 25px;
+}
+
+.head-bg3 {
+    background-image: url(images/secp-logo.png);
+    height: 90px;
+    width: 150px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+
+    margin-left: 10px;
+}
+
+.head-bg4 {
+    margin-top: 60px;
+    margin-left: -50px;
+    font-size: 20px;
+}
+
+.head-bg5 {
+    margin-top: 47px;
+    margin-right: 6px;
+    margin-left: 29px;
+    font-size: 15px;
+    display: flex;
+    gap: 15px;
+    font-weight: bolder;
+}
+
+.head-bg6 {
+    margin-top: 55px;
+    margin-right: 6px;
+    margin-left: 20px;
+    font-size: 15px;
+
+    font-weight: bolder;
+
+}
+
+.head-bg7 {
+    margin-top: 55px;
+
+    margin-left: 20px;
+    font-size: 15px;
+
+    font-weight: bolder;
+}
+
+.head-bg7 button {
+    background-color: rgb(184, 184, 236);
+
+}
+
+.head-bg6 button {
+    background-color: rgb(16, 16, 130);
+    color: white;
+}
+
+.leap-section1 {
+    height: 150px;
+    max-width: 100%;
+    background-color: white;
+    font-size: 40px;
+    padding-left: 55px;
+
+}
+
+.leap-section2 {
+    height: 50px;
+    max-width: 100%;
+
+    font-size: 25px;
+    padding-left: 55px;
+    margin-top: -20px;
+
+}
+
+.leap-section3 {
+
+    width: 1100px;
+    height: 80px;
+    border: 2px solid rgb(201, 199, 199);
+    margin-left: 50px;
+    border-radius: 10px;
+}
+
+.leap-section3:hover {
+    border: 2px solid blue;
+}
+
+.leap-section3-subparts {
+    display: flex;
+    height: 70px;
+    width: 1100px;
+    gap: 800px;
+    align-items: center;
+
+}
+
+.leap-section3-subparts p {
+    margin-left: 30px;
+    color: rgb(174, 171, 171);
+}
+
+.leap-section3-subparts p:hover {
+    color: rgb(87, 84, 84);
+
+}
+
+.leap-section3-subparts button {
+    border-radius: 4px;
+    color: white;
+    background-color: rgb(17, 17, 109);
+}
+
+.leap-section3-subparts button:hover {
+    background-color: rgb(102, 102, 184);
+}
+
+/* section4 */
+.leap-section4 {
+    max-width: 100%;
+    height: 400px;
+    background-color: white;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.leap-section4-subparts {
+    height: 300px;
+    width: 350px;
+    background-color: bisque;
+    border-radius: 15px;
+
+}
+
+.subpart1 {
+    background-color: #055627;
+
+}
+
+.subpart2 {
+    background-color: #270cd2;
+
+}
+
+.subpart3 {
+    background-color: grey;
+
+}
+
+.subpart1:hover {
+    background-color: #053218;
+
+}
+
+.subpart2:hover {
+    background-color: #06053d;
+
+}
+
+.subpart3:hover {
+    background-color: rgb(62, 61, 61);
+
+}
+
+.subpart1 h1 {
+    text-align: center;
+    color: white;
+
+}
+
+.subpart2 h1 {
+    text-align: center;
+    color: white;
+
+}
+
+.subpart3 h1 {
+    text-align: center;
+    color: white;
+
+}
+
+.leap-image {
+    background-image: url(images/sharing-file.png);
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50px;
+    border: 3px solid black;
+    margin-top: 20px;
+    margin-left: 120px;
+}
+
+.leap-image2 {
+    background-image: url(images/revenue.png);
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50px;
+    border: 3px solid black;
+    margin-top: 20px;
+    margin-left: 120px;
+}
+
+.leap-image3 {
+    background-image: url(images/printer.png);
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50px;
+    border: 3px solid black;
+    margin-top: 20px;
+    margin-left: 120px;
+}
+
+.leap-list {
+    list-style-type: disc;
+    color: white;
+    font-size: 15px;
+
+}
+
+.leap-section5 {
+    max-width: 100%;
+    height: 400px;
+    background-color: white;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    margin-top: -30px;
+}
+
+/* section6 */
+.leap-section6 {
+    width: 1000px;
+    height: 70px;
+    margin-left: 140px;
+    margin-top: -20px;
+    background-color: rgb(221, 218, 218);
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    color: rgb(36, 36, 193);
+    border-radius: 15px;
+}
+
+.leap-section6-img {
+    background-image: url(building.png);
+    width: 200px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-left: -650px;
+
+}
+
+.leap-section6 h2 {
+    margin-left: -150px;
+    color: rgb(36, 36, 193);
+}
+
+.section6-end {
+    height: 50px;
+    max-width: 100%;
+}
+
+.flash-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: white;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+}
+
+
+.flash-success {
+    background-color: #28a745;
+}
+
+.flash-error {
+    background-color: #dc3545;
+}
+
+.flash-info {
+    background-color: #17a2b8;
+}

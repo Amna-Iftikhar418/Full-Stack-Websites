@@ -1,0 +1,107 @@
+<% layout("layouts/boilerplate") -%>
+
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2><i class="fa-solid fa-house-user me-2" style="color: #8a3219;"></i>Host Dashboard - Bookings</h2>
+        <a href="/listings" class="btn btn-outline-danger">
+          <i class="fa-solid fa-compass me-2"></i>View My Listings
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <% if (bookings.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="fa-solid fa-calendar-xmark fa-4x mb-3" style="color: #ccc;"></i>
+      <h4 class="text-muted">No bookings yet</h4>
+      <p class="text-muted">When guests book your listings, they'll appear here.</p>
+    </div>
+  <% } else { %>
+    <div class="row">
+      <% for (let booking of bookings) { %>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm" style="border-radius: 16px; border: 2px solid rgba(232, 59, 71, 0.1); overflow: hidden;">
+            <% const hCover = booking.listing && ((booking.listing.images && booking.listing.images.length && booking.listing.images[0].url) || (booking.listing.image && booking.listing.image.url)); %>
+            <% if (hCover) { %>
+              <img src="<%= hCover %>" class="card-img-top" alt="<%= booking.listing.title %>" style="height: 200px; object-fit: cover;">
+            <% } else { %>
+              <div class="card-img-top bg-secondary" style="height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
+                <i class="fa-solid fa-image fa-3x"></i>
+              </div>
+            <% } %>
+
+            <div class="card-body">
+              <h5 class="card-title mb-2">
+                <% if (booking.listing) { %>
+                  <a href="/listings/<%= booking.listing.id %>" style="color: #8a3219; text-decoration: none;">
+                    <%= booking.listing.title %>
+                  </a>
+                <% } else { %>
+                  <span class="text-muted">Listing Unavailable</span>
+                <% } %>
+              </h5>
+
+              <div class="mb-3">
+                <span class="badge 
+                  <% if (booking.status === 'confirmed') { %>bg-success
+                  <% } else if (booking.status === 'pending') { %>bg-warning text-dark
+                  <% } else { %>bg-danger<% } %>
+                  p-2">
+                  <i class="fa-solid 
+                    <% if (booking.status === 'confirmed') { %>fa-check-circle
+                    <% } else if (booking.status === 'pending') { %>fa-clock
+                    <% } else { %>fa-times-circle<% } %>
+                    me-1"></i>
+                  <%= booking.status.charAt(0).toUpperCase() + booking.status.slice(1) %>
+                </span>
+              </div>
+
+              <div class="mb-3">
+                <p class="mb-1"><i class="fa-solid fa-user me-2" style="color: #8a3219;"></i><strong>Guest:</strong> <%= booking.guest ? booking.guest.username : 'Unknown' %></p>
+                <p class="mb-1"><i class="fa-solid fa-calendar-day me-2" style="color: #8a3219;"></i><strong>Check-in:</strong> <%= new Date(booking.checkIn).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                <p class="mb-1"><i class="fa-solid fa-calendar-day me-2" style="color: #8a3219;"></i><strong>Check-out:</strong> <%= new Date(booking.checkOut).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                <p class="mb-1"><i class="fa-solid fa-users me-2" style="color: #8a3219;"></i><strong>Guests:</strong> <%= booking.guests %></p>
+                <p class="mb-1"><i class="fa-solid fa-money-bill me-2" style="color: #8a3219;"></i><strong>Total:</strong> <span style="color: #8a3219; font-weight: 800;">₹<%= booking.totalPrice %></span></p>
+                <p class="text-muted small"><i class="fa-solid fa-clock me-1"></i>Booked on <%= new Date(booking.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+              </div>
+
+              <% if (booking.status !== 'cancelled') { %>
+                <div class="btn-group" role="group">
+                  <% if (booking.status !== 'confirmed') { %>
+                    <form method="post" action="/bookings/<%= booking.id %>/status?_method=PUT" class="d-inline">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input type="hidden" name="status" value="confirmed">
+                      <button type="submit" class="btn btn-success btn-sm me-2">
+                        <i class="fa-solid fa-check me-1"></i>Confirm
+                      </button>
+                    </form>
+                  <% } %>
+                  <% if (booking.status !== 'pending') { %>
+                    <form method="post" action="/bookings/<%= booking.id %>/status?_method=PUT" class="d-inline">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input type="hidden" name="status" value="pending">
+                      <button type="submit" class="btn btn-warning btn-sm me-2">
+                        <i class="fa-solid fa-clock me-1"></i>Mark Pending
+                      </button>
+                    </form>
+                  <% } %>
+                  <form method="post" action="/bookings/<%= booking.id %>/status?_method=PUT" class="d-inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="status" value="cancelled">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                      <i class="fa-solid fa-times me-1"></i>Cancel
+                    </button>
+                  </form>
+                </div>
+              <% } else { %>
+                <p class="text-muted small"><i>This booking has been cancelled.</i></p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>

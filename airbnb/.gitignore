@@ -1,0 +1,33 @@
+# Node Modules 
+node_modules/
+
+# Environment Variables 
+.env
+
+# Logs & Debug Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+server.log
+server_err.log
+
+# OS Specific Files 
+.DS_Store
+Thumbs.db
+
+# Build / Temporary Files 
+dist/
+build/
+tmp/
+temp/
+uploads/
+
+# IDE / Editor Configs 
+.vscode/
+.idea/
+
+# Coverage / Testing 
+coverage/
+.env.test
